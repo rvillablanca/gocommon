@@ -6,7 +6,7 @@ var provider DefaultTemplateProvider
 var renderer DefaultRenderer
 
 func init() {
-	renderer.provider = provider
+	renderer.provider = &provider
 }
 
 // AddTemplate creates a new template with the given name parsing all the files

@@ -17,7 +17,7 @@ type DefaultTemplateProvider struct {
 }
 
 // FindTemplate finds a template by the given name
-func (t DefaultTemplateProvider) FindTemplate(name string) *template.Template {
+func (t *DefaultTemplateProvider) FindTemplate(name string) *template.Template {
 	tmpl, ok := t.templates[name]
 	if !ok {
 		panic(fmt.Errorf("could not get template with name %v", name))
@@ -26,9 +26,9 @@ func (t DefaultTemplateProvider) FindTemplate(name string) *template.Template {
 }
 
 // AddTemplate creates a new template with the given name parsing all the files
-func (t DefaultTemplateProvider) AddTemplate(name string, files ...string) {
+func (t *DefaultTemplateProvider) AddTemplate(name string, files ...string) {
 	tmpl := template.Must(template.ParseFiles(files...))
 	t.templates[name] = tmpl
 }
 
-var _ TemplateProvider = DefaultTemplateProvider{}
+var _ TemplateProvider = &DefaultTemplateProvider{}

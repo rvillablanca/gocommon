@@ -15,11 +15,11 @@ type DefaultRenderer struct {
 }
 
 //Render execute the named template on the given writer
-func (dr DefaultRenderer) Render(name string, data interface{}, w io.Writer) {
+func (dr *DefaultRenderer) Render(name string, data interface{}, w io.Writer) {
 	template := dr.provider.FindTemplate(name)
 	template.Execute(w, data)
 }
 
 var (
-	_ Renderer = DefaultRenderer{}
+	_ Renderer = &DefaultRenderer{}
 )
