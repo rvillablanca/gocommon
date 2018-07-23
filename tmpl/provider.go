@@ -32,3 +32,10 @@ func (t *DefaultTemplateProvider) AddTemplate(name string, files ...string) {
 }
 
 var _ TemplateProvider = &DefaultTemplateProvider{}
+
+// NewTemplateProvider create a new provider
+func NewTemplateProvider() TemplateProvider {
+	p := new(DefaultTemplateProvider)
+	p.templates = make(map[string]*template.Template)
+	return p
+}

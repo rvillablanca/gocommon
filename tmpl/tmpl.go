@@ -2,12 +2,8 @@ package tmpl
 
 import "io"
 
-var provider DefaultTemplateProvider
-var renderer DefaultRenderer
-
-func init() {
-	renderer.provider = &provider
-}
+var provider = NewTemplateProvider()
+var renderer = NewRenderer(provider)
 
 // AddTemplate creates a new template with the given name parsing all the files
 func AddTemplate(name string, files ...string) {

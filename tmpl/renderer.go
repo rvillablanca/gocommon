@@ -23,3 +23,10 @@ func (dr *DefaultRenderer) Render(name string, data interface{}, w io.Writer) {
 var (
 	_ Renderer = &DefaultRenderer{}
 )
+
+// NewRenderer creates a new Renderer
+func NewRenderer(provider TemplateProvider) Renderer {
+	r := new(DefaultRenderer)
+	r.provider = provider
+	return r
+}
