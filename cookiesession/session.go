@@ -18,12 +18,14 @@ const (
 
 var (
 	defaultCookieName = "cookiesession"
-	store             sessions.Store
+	store             *sessions.CookieStore
 )
 
 // InitSession initialize the package with the name of the cookie
-func InitSession(cookieName string) {
+func InitSession(cookieName string, maxAge int, path string) {
 	store = sessions.NewCookieStore(securecookie.GenerateRandomKey(10))
+	store.MaxAge(maxAge)
+	store.Options.Path = path
 	defaultCookieName = cookieName
 }
 
