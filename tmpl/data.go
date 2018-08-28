@@ -5,6 +5,7 @@ type TemplateData struct {
 	Data   map[string]interface{}
 	Errors []string
 	Infos  []string
+	URL    string
 }
 
 // NewTD allow create an empty TemplateData
