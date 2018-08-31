@@ -21,7 +21,7 @@ var (
 // InitSession initialize the package with the name of the cookie
 func InitSession(path string, maxAge int, name string) {
 	sessionName = name
-	store := sessions.NewFilesystemStore(path, securecookie.GenerateRandomKey(10))
+	store = sessions.NewFilesystemStore(path, securecookie.GenerateRandomKey(10))
 	store.MaxAge(maxAge)
 }
 
