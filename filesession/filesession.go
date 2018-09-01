@@ -23,7 +23,7 @@ var (
 func InitSession(path string, maxAge int, name string) error {
 	sessionName = name
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err = os.Mkdir(path, 0644); err != nil {
+		if err = os.Mkdir(path, 0755); err != nil {
 			return err
 		}
 
