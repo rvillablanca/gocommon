@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )
 
@@ -20,7 +19,7 @@ var (
 )
 
 // InitSession initialize the package with the name of the cookie
-func InitSession(path string, maxAge int, name string) error {
+func InitSession(path string, maxAge int, name string, key string) error {
 	sessionName = name
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if err = os.Mkdir(path, 0755); err != nil {
@@ -28,7 +27,7 @@ func InitSession(path string, maxAge int, name string) error {
 		}
 
 	}
-	store = sessions.NewFilesystemStore(path, securecookie.GenerateRandomKey(10))
+	store = sessions.NewFilesystemStore(path, []byte(key))
 	store.MaxAge(maxAge)
 	return nil
 }
