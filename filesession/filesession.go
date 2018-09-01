@@ -4,6 +4,7 @@ package filesession
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
@@ -19,10 +20,17 @@ var (
 )
 
 // InitSession initialize the package with the name of the cookie
-func InitSession(path string, maxAge int, name string) {
+func InitSession(path string, maxAge int, name string) error {
 	sessionName = name
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		if err = os.Mkdir(path, os.ModeDir); err != nil {
+			return err
+		}
+
+	}
 	store = sessions.NewFilesystemStore(path, securecookie.GenerateRandomKey(10))
 	store.MaxAge(maxAge)
+	return nil
 }
 
 // Session allows get session reference
