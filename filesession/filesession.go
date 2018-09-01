@@ -49,8 +49,8 @@ func IsAuthenticated(r *http.Request) bool {
 	return s.Values[authKey] != nil
 }
 
-// InvalidateSession allows delete al content of the session
-func InvalidateSession(w http.ResponseWriter, r *http.Request) {
+// ClearSession allows delete all content of the session
+func ClearSession(w http.ResponseWriter, r *http.Request) {
 	s := Session(r)
 	s.Values = nil
 	SaveSession(w, r)
@@ -58,13 +58,23 @@ func InvalidateSession(w http.ResponseWriter, r *http.Request) {
 
 // Authenticated mark current session as authenticated
 func Authenticated(w http.ResponseWriter, r *http.Request) {
-	Save(authKey, "authenticated", r)
-	SaveSession(w, r)
+	s := Save(authKey, "authenticated", r)
+	SaveThisSession(s, w, r)
 }
 
 // Save allows put a value with the specified key and value
-func Save(key string, v interface{}, r *http.Request) {
-	Session(r).Values[key] = v
+func Save(key string, v interface{}, r *http.Request) *sessions.Session {
+	s := Session(r)
+	s.Values[key] = v
+	return s
+}
+
+// SaveThisSession save the provided session
+func SaveThisSession(s *sessions.Session, w http.ResponseWriter, r *http.Request) {
+	err := s.Save(r, w)
+	if err != nil {
+		panic("could not save session object:" + err.Error())
+	}
 }
 
 // SaveSession allows to save all values in the session reference
@@ -73,4 +83,11 @@ func SaveSession(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic("could not save session object:" + err.Error())
 	}
+}
+
+// DeleteSession delete the current session
+func DeleteSession(w http.ResponseWriter, r *http.Request) {
+	s := Session(r)
+	s.Options.MaxAge = -1
+	SaveThisSession(s, w, r)
 }
