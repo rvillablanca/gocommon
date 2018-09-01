@@ -19,7 +19,7 @@ var (
 )
 
 // InitSession initialize the package with the name of the cookie
-func InitSession(path string, maxAge int, name string, key string) error {
+func InitSession(maxAge int, path, name, key, contextPath string) error {
 	sessionName = name
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if err = os.Mkdir(path, 0755); err != nil {
@@ -29,6 +29,7 @@ func InitSession(path string, maxAge int, name string, key string) error {
 	}
 	store = sessions.NewFilesystemStore(path, []byte(key))
 	store.MaxAge(maxAge)
+	store.Options.Path = contextPath
 	return nil
 }
 
