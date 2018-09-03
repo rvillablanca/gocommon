@@ -2,7 +2,7 @@ package tmpl
 
 // TemplateData is used as a common data for templates.
 type TemplateData struct {
-	Data   map[string]interface{}
+	Datas  map[string]interface{}
 	Errors []string
 	Infos  []string
 	URL    string
@@ -13,13 +13,18 @@ func NewTD() *TemplateData {
 	td := new(TemplateData)
 	td.Errors = make([]string, 0)
 	td.Infos = make([]string, 0)
-	td.Data = make(map[string]interface{})
+	td.Datas = make(map[string]interface{})
 	return td
 }
 
-// Add allows add an error message to TemplateData
-func (td *TemplateData) Add(error string) {
+// Error allows add an error message to TemplateData
+func (td *TemplateData) Error(error string) {
 	td.Errors = append(td.Errors, error)
+}
+
+// Data add a data
+func (td *TemplateData) Data(key string, obj interface{}) {
+	td.Datas[key] = obj
 }
 
 // Info allows add an info message to TemplateData

@@ -7,8 +7,8 @@ import (
 
 func testData(t *testing.T) {
 	data := NewTD()
-	data.Add("an error")
-	data.Add("other error")
+	data.Error("an error")
+	data.Error("other error")
 
 	data.Info("an info message")
 
