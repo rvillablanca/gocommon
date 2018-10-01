@@ -70,16 +70,16 @@ func IsAuthenticated(r *http.Request) bool {
 }
 
 // ClearSession allows delete all content of the session
-func ClearSession(w http.ResponseWriter, r *http.Request) {
+func ClearSession(w http.ResponseWriter, r *http.Request) error {
 	s := Session(r)
 	s.Values = nil
-	SaveSession(w, r)
+	return SaveSession(w, r)
 }
 
 // Authenticated mark current session as authenticated
-func Authenticated(w http.ResponseWriter, r *http.Request) {
+func Authenticated(w http.ResponseWriter, r *http.Request) error {
 	s := Save(authKey, "authenticated", r)
-	SaveThisSession(s, w, r)
+	return SaveThisSession(s, w, r)
 }
 
 // Save allows put a value with the specified key and value
