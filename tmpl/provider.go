@@ -9,11 +9,19 @@ import (
 type TemplateProvider interface {
 	FindTemplate(string) (*template.Template, error)
 	AddTemplate(string, ...string) error
+	SetDelims(string, string)
 }
 
 // DefaultTemplateProvider is the default template provider used
 type DefaultTemplateProvider struct {
 	templates map[string]*template.Template
+	left      string
+	right     string
+}
+
+func (t *DefaultTemplateProvider) SetDelims(left, right string) {
+	t.left = left
+	t.right = right
 }
 
 // FindTemplate finds a template by the given name
@@ -32,6 +40,7 @@ func (t *DefaultTemplateProvider) AddTemplate(name string, files ...string) erro
 		return err
 	}
 
+	tmpl.Delims(t.left, t.right)
 	t.templates[name] = tmpl
 	return nil
 }
