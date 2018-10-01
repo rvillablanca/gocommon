@@ -1,12 +1,12 @@
-package filesession
-
-// Package filesession is a set of utilities on top of gorilla file sessions.
+package ssn
 
 import (
 	"fmt"
 	"net/http"
 	"os"
 
+	"github.com/boj/redistore"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )
 
@@ -15,12 +15,11 @@ const (
 )
 
 var (
-	sessionName = "fsid"
-	store       *sessions.FilesystemStore
+	sessionName = "default-ssn"
+	store       sessions.Store
 )
 
-// InitSession initialize the package with the name of the cookie
-func InitSession(maxAge int, path, name, key, contextPath string) error {
+func InitFileSystemSession(maxAge int, path, name, key, contextPath string) error {
 	sessionName = name
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if err = os.Mkdir(path, 0755); err != nil {
@@ -28,9 +27,30 @@ func InitSession(maxAge int, path, name, key, contextPath string) error {
 		}
 
 	}
-	store = sessions.NewFilesystemStore(path, []byte(key))
-	store.MaxAge(maxAge)
-	store.Options.Path = contextPath
+	fileSystemStore := sessions.NewFilesystemStore(path, []byte(key))
+	fileSystemStore.MaxAge(maxAge)
+	fileSystemStore.Options.Path = contextPath
+
+	store = fileSystemStore
+	return nil
+}
+
+func InitCookieSession(maxAge int, name, path string) {
+	sessionName = name
+	cookieSession := sessions.NewCookieStore(securecookie.GenerateRandomKey(10))
+	cookieSession.MaxAge(maxAge)
+	cookieSession.Options.Path = path
+
+	store = cookieSession
+}
+
+func InitRedisSession(size int, name, address, password, key string) error {
+	redisStore, err := redistore.NewRediStore(10, "tcp", address, password, []byte(key))
+	if err != nil {
+		return err
+	}
+
+	store = redisStore
 	return nil
 }
 
@@ -70,24 +90,18 @@ func Save(key string, v interface{}, r *http.Request) *sessions.Session {
 }
 
 // SaveThisSession save the provided session
-func SaveThisSession(s *sessions.Session, w http.ResponseWriter, r *http.Request) {
-	err := s.Save(r, w)
-	if err != nil {
-		panic("could not save session object:" + err.Error())
-	}
+func SaveThisSession(s *sessions.Session, w http.ResponseWriter, r *http.Request) error {
+	return s.Save(r, w)
 }
 
 // SaveSession allows to save all values in the session reference
-func SaveSession(w http.ResponseWriter, r *http.Request) {
-	err := Session(r).Save(r, w)
-	if err != nil {
-		panic("could not save session object:" + err.Error())
-	}
+func SaveSession(w http.ResponseWriter, r *http.Request) error {
+	return Session(r).Save(r, w)
 }
 
 // DeleteSession delete the current session
-func DeleteSession(w http.ResponseWriter, r *http.Request) {
+func DeleteSession(w http.ResponseWriter, r *http.Request) error {
 	s := Session(r)
 	s.Options.MaxAge = -1
-	SaveThisSession(s, w, r)
+	return SaveThisSession(s, w, r)
 }
