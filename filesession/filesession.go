@@ -3,6 +3,7 @@ package filesession
 // Package filesession is a set of utilities on top of gorilla file sessions.
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -37,8 +38,7 @@ func InitSession(maxAge int, path, name, key, contextPath string) error {
 func Session(r *http.Request) *sessions.Session {
 	s, err := store.Get(r, sessionName)
 	if err != nil {
-		//If this ocurrs, then panic will be recovered ant 500 error page will be rendered
-		panic("could not get session object:" + err.Error())
+		fmt.Printf("warning: an error ocurred while getting Session from request: %v", err)
 	}
 	return s
 }
