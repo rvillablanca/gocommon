@@ -46,6 +46,7 @@ func (t DefaultTemplateProvider) AddTemplate(name string, files ...string) error
 }
 
 var _ TemplateProvider = DefaultTemplateProvider{}
+var _ TemplateProvider = DynamicProvider{}
 
 // NewTemplateProvider create a new provider
 func NewTemplateProvider(dynamic bool) TemplateProvider {
