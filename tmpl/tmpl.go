@@ -7,6 +7,11 @@ var Dynamic = false
 var provider = NewTemplateProvider(Dynamic)
 var renderer = NewRenderer(provider)
 
+func ConfigureDynamic(dynamic bool) {
+	Dynamic = dynamic
+	provider = NewTemplateProvider(Dynamic)
+}
+
 func SetDelims(left, right string) {
 	provider.SetDelims(left, right)
 }
