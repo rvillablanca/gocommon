@@ -53,7 +53,7 @@ func NewTemplateProvider(dynamic bool) TemplateProvider {
 		return NewDynamic()
 	}
 
-	p := new(DefaultTemplateProvider)
+	p := DefaultTemplateProvider{}
 	p.templates = make(map[string]*template.Template)
 	return p
 }
