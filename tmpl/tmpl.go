@@ -3,8 +3,8 @@ package tmpl
 import (
 	"io"
 )
-
-var provider = NewTemplateProvider()
+var Dynamic = false
+var provider = NewTemplateProvider(Dynamic)
 var renderer = NewRenderer(provider)
 
 func SetDelims(left, right string) {

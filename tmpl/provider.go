@@ -19,13 +19,13 @@ type DefaultTemplateProvider struct {
 	right     string
 }
 
-func (t *DefaultTemplateProvider) SetDelims(left, right string) {
+func (t DefaultTemplateProvider) SetDelims(left, right string) {
 	t.left = left
 	t.right = right
 }
 
 // FindTemplate finds a template by the given name
-func (t *DefaultTemplateProvider) FindTemplate(name string) (*template.Template, error) {
+func (t DefaultTemplateProvider) FindTemplate(name string) (*template.Template, error) {
 	tmpl, ok := t.templates[name]
 	if !ok {
 		return nil, fmt.Errorf("could not get template with name %v", name)
@@ -34,7 +34,7 @@ func (t *DefaultTemplateProvider) FindTemplate(name string) (*template.Template,
 }
 
 // AddTemplate creates a new template with the given name parsing all the files
-func (t *DefaultTemplateProvider) AddTemplate(name string, files ...string) error {
+func (t DefaultTemplateProvider) AddTemplate(name string, files ...string) error {
 	tmpl, err := template.ParseFiles(files...)
 	if err != nil {
 		return err
@@ -45,10 +45,14 @@ func (t *DefaultTemplateProvider) AddTemplate(name string, files ...string) erro
 	return nil
 }
 
-var _ TemplateProvider = &DefaultTemplateProvider{}
+var _ TemplateProvider = DefaultTemplateProvider{}
 
 // NewTemplateProvider create a new provider
-func NewTemplateProvider() TemplateProvider {
+func NewTemplateProvider(dynamic bool) TemplateProvider {
+	if dynamic {
+		return NewDynamic()
+	}
+
 	p := new(DefaultTemplateProvider)
 	p.templates = make(map[string]*template.Template)
 	return p
