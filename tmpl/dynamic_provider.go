@@ -6,7 +6,7 @@ import (
 )
 
 type DynamicProvider struct {
-	df DefaultTemplateProvider
+	DefaultTemplateProvider
 	dynamics map[string][]string
 }
 
@@ -20,7 +20,7 @@ func (dp DynamicProvider) FindTemplate(name string) (*template.Template, error) 
 		return nil, err
 	}
 
-	tmpl.Delims(dp.df.left, dp.df.right)
+	tmpl.Delims(dp.left, dp.right)
 	return tmpl, nil
 }
 
@@ -34,12 +34,12 @@ func (dp DynamicProvider) AddTemplate(name string, files...string) error {
 }
 
 func (dp DynamicProvider) SetDelims(left, right string) {
-	dp.df.SetDelims(left, right)
+	dp.SetDelims(left, right)
 }
 
 func NewDynamic() DynamicProvider {
 	defaultTemplateProvider := NewTemplateProvider(false).(DefaultTemplateProvider)
-	provider := DynamicProvider{df: defaultTemplateProvider}
+	provider := DynamicProvider{DefaultTemplateProvider: defaultTemplateProvider}
 	provider.dynamics = make(map[string][]string)
 	return provider
 }

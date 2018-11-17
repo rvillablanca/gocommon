@@ -10,6 +10,7 @@ var renderer = NewRenderer(provider)
 func ConfigureDynamic(dynamic bool) {
 	Dynamic = dynamic
 	provider = NewTemplateProvider(Dynamic)
+	renderer = NewRenderer(provider)
 }
 
 func SetDelims(left, right string) {
