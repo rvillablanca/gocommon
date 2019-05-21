@@ -1,4 +1,4 @@
-package rut
+package ruts
 
 import (
     "fmt"
