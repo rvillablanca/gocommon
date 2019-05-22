@@ -80,11 +80,11 @@ func ClearSession(w http.ResponseWriter, r *http.Request) error {
 
 // Authenticated mark current session as authenticated
 func Authenticated(w http.ResponseWriter, r *http.Request) {
-	Save(authKey, "authenticated", r)
+	Put(authKey, "authenticated", r)
 }
 
 // Save allows put a value with the specified key and value
-func Save(key string, v interface{}, r *http.Request) *sessions.Session {
+func Put(key string, v interface{}, r *http.Request) *sessions.Session {
 	s := Session(r)
 	s.Values[key] = v
 	return s
