@@ -4,6 +4,9 @@ import (
     "fmt"
     "strconv"
     "strings"
+
+    "golang.org/x/text/language"
+    "golang.org/x/text/message"
 )
 
 func Clean(rut string) (string, error) {
@@ -74,4 +77,10 @@ func Validate(rut string) (bool, error) {
     }
 
     return calculateDV == providedDV, nil
+}
+
+func Format(rut int) string{
+    formatted := message.NewPrinter(language.Spanish).Sprintf("%d", rut)
+    dv := GetDV(rut)
+    return fmt.Sprintf("%s-%s", formatted, string(dv))
 }

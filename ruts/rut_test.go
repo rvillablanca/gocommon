@@ -86,3 +86,12 @@ func TestValidate(t *testing.T) {
     assert.True(t, valid)
 }
 
+func TestFormat(t *testing.T) {
+    assert.Equal(t, "16.089.456-3", Format(16089456))
+    assert.Equal(t, "16.416.888-3", Format(16416888))
+    assert.Equal(t, "24.322.384-9", Format(24322384))
+    assert.Equal(t, "22.652.884-9", Format(22652884))
+    assert.Equal(t, "11.111.111-1", Format(11111111))
+    assert.Equal(t, "1-9", Format(1))
+}
+

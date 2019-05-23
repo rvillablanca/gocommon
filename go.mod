@@ -5,4 +5,5 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.1.2
 	github.com/stretchr/testify v1.3.0
+	golang.org/x/text v0.3.2
 )
