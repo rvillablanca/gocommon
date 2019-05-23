@@ -6,14 +6,23 @@ import (
     "strings"
 )
 
-func Parse(rut string) (int, error) {
+func Clean(rut string) (string, error) {
     if rut == "" || len(rut) < 1 || len(rut) > 12 {
-        return 0, fmt.Errorf("invalid rut %s", rut)
+        return "", fmt.Errorf("invalid rut %s", rut)
     }
 
     rut = strings.Replace(rut, ".", "", -1)
     rut = strings.Replace(rut, ",", "", -1)
     rut = strings.Replace(rut, "-", "", -1)
+
+    return rut, nil
+}
+
+func Parse(rut string) (int, error) {
+    rut, err := Clean(rut)
+    if err != nil {
+        return 0, err
+    }
 
     s := []rune(rut)
     s = s[:len(s)-1]
@@ -42,4 +51,27 @@ func GetDV(rut int) rune {
         return 'K'
     }
     return rune(d + 48)
+}
+
+func Validate(rut string) (bool, error) {
+    parsed, err := Parse(rut)
+    if err != nil {
+        return false, err
+    }
+
+    calculateDV := GetDV(parsed)
+
+    cleaned, err := Clean(rut)
+    if err != nil {
+        return false, err
+    }
+
+    cleanedRune := []rune(cleaned)
+    providedDV := cleanedRune[len(cleanedRune ) - 1]
+
+    if providedDV == 'k' {
+        providedDV = 'K'
+    }
+
+    return calculateDV == providedDV, nil
 }

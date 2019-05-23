@@ -39,3 +39,50 @@ func TestParse(t *testing.T) {
     assert.Equal(t, 0, rut)
     assert.NotNil(t, err)
 }
+
+func TestValidate(t *testing.T) {
+    valid, err := Validate("16.089.456-3")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("16.416.888-3")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("226528849")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("243223849")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("12341246k")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("12341246K")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("11.111.111-1")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+
+    valid, err = Validate("104626691")
+    assert.Nil(t, err)
+    assert.False(t, valid)
+
+    valid, err = Validate("11.111.111-k")
+    assert.Nil(t, err)
+    assert.False(t, valid)
+
+    valid, err = Validate("")
+    assert.NotNil(t, err)
+    assert.False(t, valid)
+
+    valid, err = Validate("19")
+    assert.Nil(t, err)
+    assert.True(t, valid)
+}
+
