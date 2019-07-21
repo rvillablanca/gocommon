@@ -1,12 +1,17 @@
 package ruts
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
+)
+
+var (
+	ErrInvalidRut = errors.New("invalid rut")
 )
 
 func Clean(rut string) string {
@@ -18,7 +23,7 @@ func Clean(rut string) string {
 
 func Parse(rut string) (int, error) {
 	if rut == "" || len(rut) < 1 || len(rut) > 12 {
-		return 0, fmt.Errorf("invalid rut %s", rut)
+		return 0, ErrInvalidRut
 	}
 
 	rut = Clean(rut)
