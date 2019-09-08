@@ -20,3 +20,7 @@ Currently it supports:
 ### github.com/rvillablanca/gocommon/tmpl
 
 Utilities to work with server side tempaltes
+
+### github.com/rvillablanca/sdb
+
+Simple layer abstraction over `sql.DB` and `sql.Tx`. 
