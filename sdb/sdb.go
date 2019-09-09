@@ -31,15 +31,15 @@ func (sdb *ServiceDB) Query(query string, args ...interface{}) (*sql.Rows, error
 	return sdb.TX.Query(query, args...)
 }
 
-func NewFromTx(tx *sql.Tx) *ServiceDB {
-	return &ServiceDB{
+func NewFromTx(tx *sql.Tx) ServiceDB {
+	return ServiceDB{
 		DB: nil,
 		TX: tx,
 	}
 }
 
-func NewFromDB(db *sql.DB) *ServiceDB {
-	return &ServiceDB{
+func NewFromDB(db *sql.DB) ServiceDB {
+	return ServiceDB{
 		DB: db,
 		TX: nil,
 	}
