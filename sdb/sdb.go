@@ -7,6 +7,14 @@ type ServiceDB struct {
 	TX *sql.Tx
 }
 
+func (sdb *ServiceDB) Prepare(query string) (*sql.Stmt, error) {
+	if sdb.DB != nil {
+		return sdb.DB.Prepare(query)
+	}
+
+	return sdb.TX.Prepare(query)
+}
+
 func (sdb *ServiceDB) Exec(query string, args ...interface{}) (sql.Result, error) {
 	if sdb.DB != nil {
 		return sdb.DB.Exec(query, args...)
