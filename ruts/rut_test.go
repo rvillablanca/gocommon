@@ -16,6 +16,11 @@ func TestDV(t *testing.T) {
 	assert.Equal(t, '9', GetDV(99999999))
 	assert.Equal(t, 'K', GetDV(12341246))
 	assert.Equal(t, 'K', GetDV(12341263))
+	assert.Equal(t, '0', GetDV(18748854))
+	assert.Equal(t, '0', GetDV(9845576))
+	assert.Equal(t, '0', GetDV(7961878))
+	assert.Equal(t, '0', GetDV(20145680))
+	assert.Equal(t, '0', GetDV(10704316))
 }
 
 func TestParse(t *testing.T) {

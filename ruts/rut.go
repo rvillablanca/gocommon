@@ -51,6 +51,9 @@ func GetDV(rut int) rune {
 	}
 	r := count % 11
 	d := 11 - r
+	if d == 11 {
+		return '0'
+	}
 	if d == 10 {
 		return 'K'
 	}
