@@ -1,29 +1,39 @@
 package tmpl
 
 import (
+	"html/template"
 	"io"
 )
-var Dynamic = false
-var provider = NewTemplateProvider(Dynamic)
-var renderer = NewRenderer(provider)
 
-func ConfigureDynamic(dynamic bool) {
-	Dynamic = dynamic
-	provider = NewTemplateProvider(Dynamic)
-	renderer = NewRenderer(provider)
+type Templater interface {
+	TemplateProvider
+	Renderer
 }
 
-func SetDelims(left, right string) {
-	provider.SetDelims(left, right)
+type defaultTemplater struct {
+	templateProvider TemplateProvider
+	renderer         Renderer
 }
 
-// AddTemplate creates a new template with the given name parsing all the files
-func AddTemplate(name string, files ...string) error {
-	return provider.AddTemplate(name, files...)
-
+func (dt *defaultTemplater) FindTemplate(t string) (*template.Template, error) {
+	return dt.templateProvider.FindTemplate(t)
 }
 
-//Render execute the named template on the given writer
-func Render(name string, data interface{}, w io.Writer) error {
-	return renderer.Render(name, data, w)
+func (dt *defaultTemplater) AddTemplate(t string, f ...string) error {
+	return dt.templateProvider.AddTemplate(t, f...)
+}
+
+func (dt *defaultTemplater) SetDelims(l string, r string) {
+	dt.templateProvider.SetDelims(l, r)
+}
+
+func (dt *defaultTemplater) Render(t string, d interface{}, w io.Writer) error {
+	return dt.renderer.Render(t, d, w)
+}
+
+func NewTemplater(dynamic bool) Templater {
+	var t defaultTemplater
+	t.templateProvider = NewTemplateProvider(dynamic)
+	t.renderer = NewRenderer(t.templateProvider)
+	return &t
 }

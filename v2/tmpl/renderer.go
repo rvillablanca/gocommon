@@ -20,7 +20,7 @@ func (dr *DefaultRenderer) Render(name string, data interface{}, w io.Writer) er
 	if err != nil {
 		return err
 	}
-	template.Execute(w, data)
+	_ = template.Execute(w, data)
 	return nil
 }
 

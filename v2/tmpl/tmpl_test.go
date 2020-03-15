@@ -5,13 +5,11 @@ import (
 	"testing"
 )
 
-func testData(t *testing.T) {
+func TestData(t *testing.T) {
 	data := NewTD()
 	data.Error("an error")
 	data.Error("other error")
-
 	data.Info("an info message")
-
 	hasError := data.HasErrors()
 
 	if !hasError {
@@ -27,19 +25,21 @@ func testData(t *testing.T) {
 	}
 }
 
-func testProvider(t *testing.T) {
-	AddTemplate("one", "./example.tmpl")
-	AddTemplate("two", "./example2.tmpl")
+func TestProvider(t *testing.T) {
+	templater := NewTemplater(false)
+	templater.AddTemplate("one", "./example.tmpl")
+	templater.AddTemplate("two", "./example2.tmpl")
 
 	var w bytes.Buffer
-	Render("one", nil, &w)
+	templater.Render("one", nil, &w)
 
 	content := string(w.Bytes())
 	if content != "example" {
 		t.Error("invalid content for template one")
 	}
 
-	Render("two", nil, &w)
+	w = bytes.Buffer{}
+	templater.Render("two", nil, &w)
 	content = string(w.Bytes())
 	if content != "example2" {
 		t.Error("invalid content for template two")
