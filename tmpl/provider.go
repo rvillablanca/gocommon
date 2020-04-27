@@ -10,6 +10,7 @@ type TemplateProvider interface {
 	FindTemplate(string) (*template.Template, error)
 	AddTemplate(string, ...string) error
 	SetDelims(string, string)
+	AddTemplateWithName(*template.Template, string)
 }
 
 // DefaultTemplateProvider is the default template provider used
@@ -33,6 +34,11 @@ func (t DefaultTemplateProvider) FindTemplate(name string) (*template.Template, 
 	return tmpl, nil
 }
 
+func (t DefaultTemplateProvider) AddTemplateWithName(tt *template.Template, name string) {
+	tt.Delims(t.left, t.right)
+	t.templates[name] = tt
+}
+
 // AddTemplate creates a new template with the given name parsing all the files
 func (t DefaultTemplateProvider) AddTemplate(name string, files ...string) error {
 	tmpl, err := template.ParseFiles(files...)
@@ -46,7 +52,6 @@ func (t DefaultTemplateProvider) AddTemplate(name string, files ...string) error
 }
 
 var _ TemplateProvider = DefaultTemplateProvider{}
-var _ TemplateProvider = DynamicProvider{}
 
 // NewTemplateProvider create a new provider
 func NewTemplateProvider(dynamic bool) TemplateProvider {

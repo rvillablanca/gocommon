@@ -10,6 +10,8 @@ type DynamicProvider struct {
 	dynamics map[string][]string
 }
 
+var _ TemplateProvider = DynamicProvider{}
+
 func (dp DynamicProvider) FindTemplate(name string) (*template.Template, error) {
 	if _, ok := dp.dynamics[name]; !ok {
 		return nil, fmt.Errorf("template %s does not exists", name)
@@ -24,13 +26,17 @@ func (dp DynamicProvider) FindTemplate(name string) (*template.Template, error) 
 	return tmpl, nil
 }
 
-func (dp DynamicProvider) AddTemplate(name string, files...string) error {
+func (dp DynamicProvider) AddTemplate(name string, files ...string) error {
 	if _, ok := dp.dynamics[name]; ok {
 		return fmt.Errorf("template %s already exists", name)
 	}
 
 	dp.dynamics[name] = files
 	return nil
+}
+
+func (dp DynamicProvider) AddTemplateWithName(tt *template.Template, name string) {
+	dp.DefaultTemplateProvider.AddTemplateWithName(tt, name)
 }
 
 func (dp DynamicProvider) SetDelims(left, right string) {
@@ -43,7 +49,3 @@ func NewDynamic() DynamicProvider {
 	provider.dynamics = make(map[string][]string)
 	return provider
 }
-
-
-
-

@@ -15,6 +15,10 @@ type defaultTemplater struct {
 	renderer         Renderer
 }
 
+func (dt *defaultTemplater) AddTemplateWithName(tt *template.Template, name string) {
+	dt.templateProvider.AddTemplateWithName(tt, name)
+}
+
 func (dt *defaultTemplater) FindTemplate(t string) (*template.Template, error) {
 	return dt.templateProvider.FindTemplate(t)
 }
