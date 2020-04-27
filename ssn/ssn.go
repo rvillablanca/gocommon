@@ -3,10 +3,7 @@ package ssn
 import (
 	"fmt"
 	"net/http"
-	"os"
 
-	"github.com/boj/redistore"
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )
 
@@ -18,43 +15,6 @@ var (
 	sessionName = "default-ssn"
 	store       sessions.Store
 )
-
-func InitFileSystemSession(maxAge int, path, name, key, contextPath string) error {
-	sessionName = name
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		if err = os.Mkdir(path, 0755); err != nil {
-			return err
-		}
-
-	}
-	fileSystemStore := sessions.NewFilesystemStore(path, []byte(key))
-	fileSystemStore.MaxAge(maxAge)
-	fileSystemStore.Options.Path = contextPath
-
-	store = fileSystemStore
-	return nil
-}
-
-func InitCookieSession(maxAge int, name, path string) {
-	sessionName = name
-	cookieSession := sessions.NewCookieStore(securecookie.GenerateRandomKey(10))
-	cookieSession.MaxAge(maxAge)
-	cookieSession.Options.Path = path
-
-	store = cookieSession
-}
-
-func InitRedisSession(maxAgeStore int, name, address, password, key string) error {
-	sessionName = name
-	redisStore, err := redistore.NewRediStore(10, "tcp", address, password, []byte(key))
-	if err != nil {
-		return err
-	}
-
-	redisStore.SetMaxAge(maxAgeStore)
-	store = redisStore
-	return nil
-}
 
 // Session allows get session reference
 func Session(r *http.Request) *sessions.Session {
