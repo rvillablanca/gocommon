@@ -8,6 +8,8 @@ const (
 	authKey = "authenticated"
 )
 
+var _ Sessioner = &DefaultSessioner{}
+
 type DefaultSessioner struct {
 	store       sessions.Store
 	sessionName string
