@@ -1,4 +1,4 @@
-module github.com/rvillablanca/gocommon/v2
+module github.com/rvillablanca/gocommon/v3
 
 require (
 	github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff
